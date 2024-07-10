@@ -13,11 +13,11 @@ async def fetch_character(session, url):
             print(f"Failed to fetch {url}: {response.status}")
             return None
 
-async def fetch_name(session, url):
+async def fetch_name(session, url, key_name: str):
     async with session.get(url) as response:
         if response.status == 200:
             data = await response.json()
-            return data.get('name', 'Unknown')
+            return data.get(key_name, 'Unknown')
         else:
             print(f"Failed to fetch {url}: {response.status}")
             return 'Unknown'
@@ -47,10 +47,10 @@ async def main():
                 insert_tasks = []
                 for character in characters:
                     if character:
-                        films = ', '.join([await fetch_name(session, film) for film in character['films']])
-                        species = ', '.join([await fetch_name(session, specie) for specie in character['species']])
-                        starships = ', '.join([await fetch_name(session, starship) for starship in character['starships']])
-                        vehicles = ', '.join([await fetch_name(session, vehicle) for vehicle in character['vehicles']])
+                        films = ', '.join([await fetch_name(session, film, 'title') for film in character['films']])
+                        species = ', '.join([await fetch_name(session, specie, 'name') for specie in character['species']])
+                        starships = ', '.join([await fetch_name(session, starship, 'name') for starship in character['starships']])
+                        vehicles = ', '.join([await fetch_name(session, vehicle, 'name') for vehicle in character['vehicles']])
                         insert_tasks.append(insert_character(pool, character, films, species, starships, vehicles))
 
                 await asyncio.gather(*insert_tasks)
