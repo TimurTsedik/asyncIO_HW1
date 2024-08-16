@@ -1,9 +1,11 @@
-### запускаем 
+### Start the Containers
 docker-compose up -d
-### запускаем миграции
-python3 migrate.py
-### запускаем скачивание данных
-python3 load_data.py
-### проверяем данные
-python3 check_data.py
 
+### Run Migrations
+python3 migrate.py
+
+### Start Data Download
+python3 load_data.py
+
+### Verify Data
+python3 check_data.py
